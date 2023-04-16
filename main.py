@@ -10,7 +10,7 @@ DATEBASE = 'static/DB/dogs.db'
 
 
 class Dogs(dogs_db.Model):
-    __tablename__ = 'test'
+    __tablename__ = 'breeds'
     id = dogs_db.Column(dogs_db.Text(), primary_key=True)
     photo = dogs_db.Column(dogs_db.Text(), nullable=False)
     size = dogs_db.Column(dogs_db.INTEGER(), nullable=False)
@@ -24,6 +24,9 @@ class Dogs(dogs_db.Model):
     weight = dogs_db.Column(dogs_db.TEXT(), nullable=False)
     height = dogs_db.Column(dogs_db.Text(), nullable=False)
     lifespan = dogs_db.Column(dogs_db.TEXT(), nullable=False)
+
+    def __repr__(self):
+        return '<Dogs> %r' % self.id
 
 
 # для бд начало
@@ -47,10 +50,11 @@ def query_db(query, args=(), one=False):
     cur.close()
     return (rv[0] if rv else None) if one else rv
 
+
 # для запуска связи с бд следующая строка
-with app.app_context():
-    for test in query_db('SELECT * FROM test'): #поиск в таблице тест
-        print(test['breed'], 'has the id', test['size'])  # пишешь название столбца и получаешь занчение
+#with app.app_context():
+   # for test in query_db('SELECT * FROM breeds'): #поиск в таблице тест
+     #   print(test['breed'], 'has the id', test['size'])  # пишешь название столбца и получаешь значение
 
 # для бд конец
 #@app.before_request
@@ -61,10 +65,16 @@ with app.app_context():
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/home', methods=['POST', 'GET'])
 def index():
+    dogs_con = []
+    #with app.app_context():
+       # for test in query_db('SELECT * FROM breeds'):  # поиск в таблице тест
+       #     dogs = test['breed']
+        #    dogs_con.append(dogs)
     if request.method == 'POST':
-        search = request.form['search']
+        pass
+        #search = request.form['search']
     else:
-        return render_template("index.html")
+        return render_template("index.html")#, dog=dogs_con)
 
 
 @app.route('/help', methods=['POST', 'GET'])
@@ -81,6 +91,20 @@ def about():
         pass
     else:
         return render_template("about.html")
+
+
+@app.route('/europa', methods=['POST', 'GET'])
+def europa():
+    dogs_eu = []
+    eu = []
+    with app.app_context():
+        for test in query_db('SELECT * FROM breeds'):  # поиск в таблице тест
+            dogs = test['breed']
+            dogs_eu.append(dogs)
+    if request.method == 'POST':
+        pass
+    else:
+        return render_template("europa.html", dogs_eu=dogs_eu)
 
 
 @app.route('/test', methods=['POST', 'GET'])

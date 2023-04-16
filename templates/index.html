@@ -19,7 +19,18 @@
         <input type="submit" class="btn btn-success" value="Поиск" align="right">
       </form>
     </header>
-<h1 align="center">Породы собак</h1>
-<p>В настоящее время в мире насчитывается около 400 пород собак!</p>
+
+<div class="container mt-5">
+    <h1 align="center">Породы собак</h1>
+    <p>В настоящее время в мире насчитывается около 400 пород собак!</p>
+
+    <li class="nav-item"><a href="/europa" class="nav-link active" aria-current="page">Собаки Европы</a></li>
+
+    {% for el in dog %}
+    <div class="alert alert-info">
+        <h2>{{ el }}</h2>
+    </div>
+    {% endfor %}
+</div>
 </body>
 </html>
