@@ -19,7 +19,17 @@
       <input type="submit" class="btn btn-success" value="Поиск" align="right">
     </form>
     </header>
-<h1 align="center">Собаки Европы</h1>
+<div class="container mt-5">
+    <h1 align="center">Породы Европы</h1>
+
+    {% for el in dogs_eu %}
+    <div class="alert alert-info">
+        {% for i in el %}
+            <h2>{{ i }}</h2>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
 
 </body>
 </html>

@@ -65,7 +65,7 @@ def query_db(query, args=(), one=False):
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/home', methods=['POST', 'GET'])
 def index():
-    dogs_con = []
+    #dogs_con = []
     #with app.app_context():
        # for test in query_db('SELECT * FROM breeds'):  # поиск в таблице тест
        #     dogs = test['breed']
@@ -96,15 +96,27 @@ def about():
 @app.route('/europa', methods=['POST', 'GET'])
 def europa():
     dogs_eu = []
-    eu = []
+    #dogs_eu_phot = []
+    eu = ["Германия", "Великобритания", "Италия", "Англия", "Франция", "Россия", "Франция", "Бельгия", "Швейцария",
+          "Хорватия", "Бельгия", "Чехия", "Афганистан", "Венгрия", "Турция", "СССР", "Испания", "Ирландия",
+          "Германская империя", "Финляндия", "Армения"]
     with app.app_context():
         for test in query_db('SELECT * FROM breeds'):  # поиск в таблице тест
-            dogs = test['breed']
-            dogs_eu.append(dogs)
+            if test['Country_of_Origin'] in eu:
+                dogs = [test['breed'], "Размер: " + str(test['size']), "Линька: " + str(test['hairiness']),
+                        "Агрессивность: " + str(test['aggressiveness']),
+                        "Поддатливость дрессировки: " + str(test['training']),
+                        "Требование к уходу: " + str(test['need_for_care']),
+                        "Страна появления: " + str(test['Country_of_Origin']),
+                        "Эпоха появления: " + str(test['Time_of_origin_of_the_breed']), "Вес: " + str(test['Weight']),
+                        "Длина: " + str(test['Height']), "Продолжительность жизни: " + str(test['Lifespan'])]
+                dogs_eu.append(dogs)
+                #pho = test['photo']
+               # dogs_eu_phot.append(pho)
     if request.method == 'POST':
         pass
     else:
-        return render_template("europa.html", dogs_eu=dogs_eu)
+        return render_template("europa.html", dogs_eu=dogs_eu)#, dogs_eu_phot=dogs_eu_phot)
 
 
 @app.route('/test', methods=['POST', 'GET'])
