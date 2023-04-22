@@ -3,30 +3,21 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dogs.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-dogs_db = SQLAlchemy(app)
+users_db = SQLAlchemy(app)
 DATEBASE = 'static/DB/dogs.db'
 
 
-class Dogs(dogs_db.Model):
-    __tablename__ = 'breeds'
-    id = dogs_db.Column(dogs_db.Text(), primary_key=True)
-    photo = dogs_db.Column(dogs_db.Text(), nullable=False)
-    size = dogs_db.Column(dogs_db.INTEGER(), nullable=False)
-    hairiness = dogs_db.Column(dogs_db.INTEGER(), nullable=False)
-    aggressiveness = dogs_db.Column(dogs_db.INTEGER(), nullable=False)
-    training = dogs_db.Column(dogs_db.INTEGER(), nullable=False)
-    need_for_care = dogs_db.Column(dogs_db.INTEGER(), nullable=False)
-    purpose = dogs_db.Column(dogs_db.INTEGER(), nullable=False)
-    origin = dogs_db.Column(dogs_db.Text(), nullable=False)
-    time_origin = dogs_db.Column(dogs_db.TEXT(), nullable=False)
-    weight = dogs_db.Column(dogs_db.TEXT(), nullable=False)
-    height = dogs_db.Column(dogs_db.Text(), nullable=False)
-    lifespan = dogs_db.Column(dogs_db.TEXT(), nullable=False)
+class Users(users_db.Model):
+    __tablename__ = "users"
 
-    def __repr__(self):
-        return '<Dogs> %r' % self.id
+    id = users_db.Column(users_db.Integer, primary_key=True, autoincrement=True)
+    us_login = users_db.Column(users_db.String(15), nullable=False)
+    us_password = users_db.Column(users_db.String(20), nullable=False)
+
+   # def __repr__(self):
+      #  return '<Users> %r' % self.id
 
 
 # для бд начало
@@ -65,16 +56,10 @@ def query_db(query, args=(), one=False):
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/home', methods=['POST', 'GET'])
 def index():
-    #dogs_con = []
-    #with app.app_context():
-       # for test in query_db('SELECT * FROM breeds'):  # поиск в таблице тест
-       #     dogs = test['breed']
-        #    dogs_con.append(dogs)
     if request.method == 'POST':
         pass
-        #search = request.form['search']
     else:
-        return render_template("index.html")#, dog=dogs_con)
+        return render_template("index.html")
 
 
 @app.route('/help', methods=['POST', 'GET'])
@@ -103,11 +88,7 @@ def europa():
     with app.app_context():
         for test in query_db('SELECT * FROM breeds'):  # поиск в таблице тест
             if test['Country_of_Origin'] in eu:
-                dogs = [test['breed'], "Размер: " + str(test['size']), "Линька: " + str(test['hairiness']),
-                        "Агрессивность: " + str(test['aggressiveness']),
-                        "Поддатливость дрессировки: " + str(test['training']),
-                        "Требование к уходу: " + str(test['need_for_care']),
-                        "Страна появления: " + str(test['Country_of_Origin']),
+                dogs = [test['breed'], "Страна появления: " + str(test['Country_of_Origin']),
                         "Эпоха появления: " + str(test['Time_of_origin_of_the_breed']), "Вес: " + str(test['Weight']),
                         "Длина: " + str(test['Height']), "Продолжительность жизни: " + str(test['Lifespan'])]
                 dogs_eu.append(dogs)
@@ -127,14 +108,33 @@ def test():
         return render_template("test.html")
 
 
-@app.route('/result_search.html', methods=['POST', 'GET'])
+@app.route('/result_search', methods=['POST', 'GET'])
 def result_search():
-    inf_search = Dogs.query.all
     if request.method == 'POST':
         pass
     else:
         return render_template("result_search.html")
 
 
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        us_login = request.form['us_login']
+        us_password = request.form['us_password']
+
+        user = Users(us_login=us_login, us_password=us_password)
+
+        try:
+            users_db.session.add(user)
+            users_db.session.commit()
+            return redirect('/')
+        except:
+            return "Ошибка при регистрации"
+    else:
+        return render_template("login.html")
+
+
 if __name__ == '__main__':
+    with app.app_context():
+        users_db.create_all()
     app.run(debug=True)
