@@ -96,7 +96,7 @@ def about():
 @app.route('/europa', methods=['POST', 'GET'])
 def europa():
     dogs_eu = []
-    #dogs_eu_phot = []
+    dogs_eu_phot = []
     eu = ["Германия", "Великобритания", "Италия", "Англия", "Франция", "Россия", "Франция", "Бельгия", "Швейцария",
           "Хорватия", "Бельгия", "Чехия", "Афганистан", "Венгрия", "Турция", "СССР", "Испания", "Ирландия",
           "Германская империя", "Финляндия", "Армения"]
@@ -111,12 +111,12 @@ def europa():
                         "Эпоха появления: " + str(test['Time_of_origin_of_the_breed']), "Вес: " + str(test['Weight']),
                         "Длина: " + str(test['Height']), "Продолжительность жизни: " + str(test['Lifespan'])]
                 dogs_eu.append(dogs)
-                #pho = test['photo']
-               # dogs_eu_phot.append(pho)
+                pho = test['photo']
+                dogs_eu_phot.append(pho)
     if request.method == 'POST':
         pass
     else:
-        return render_template("europa.html", dogs_eu=dogs_eu)#, dogs_eu_phot=dogs_eu_phot)
+        return render_template("europa.html", dogs_eu=dogs_eu, dogs_eu_phot=dogs_eu_phot)
 
 
 @app.route('/test', methods=['POST', 'GET'])

@@ -7,29 +7,22 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
-<header class="d-flex justify-content-center py-3">
-      <ul class="nav nav-pills">
-        <li class="nav-item"><a href="/" class="nav-link active" aria-current="page">Главная</a></li>
-        <li class="nav-item"><a href="/test" class="nav-link">Тест</a></li>
-        <li class="nav-item"><a href="/about" class="nav-link">О нас</a></li>
-        <li class="nav-item"><a href="/help" class="nav-link">Помощь</a></li>
-      </ul>
-    <form method="post">
-      <input type="text" name="search" class="form-control" align="right" placeholder="Поиск собаки">
-      <input type="submit" class="btn btn-success" value="Поиск" align="right">
-    </form>
-    </header>
+{% extends "cap.html" %}
+{% block functions %}
 <div class="container mt-5">
     <h1 align="center">Породы Европы</h1>
-
     {% for el in dogs_eu %}
     <div class="alert alert-info">
         {% for i in el %}
-            <h2>{{ i }}</h2>
+            {% if i in dogs_eu_phot %}
+                <img src="{{ i }}">
+            {% else %}
+                <h2>{{ i }}</h2>
+            {% endif %}
         {% endfor %}
     </div>
     {% endfor %}
 </div>
-
+{% endblock %}
 </body>
 </html>
