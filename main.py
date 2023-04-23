@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, g, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3
@@ -223,6 +224,8 @@ def favorites():
 
 
 if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
     with app.app_context():
         users_db.create_all()
     app.run(debug=True)
