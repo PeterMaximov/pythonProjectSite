@@ -50,10 +50,6 @@ def query_db(query, args=(), one=False):
    # for test in query_db('SELECT * FROM breeds'): #поиск в таблице тест
      #   print(test['breed'], 'has the id', test['size'])  # пишешь название столбца и получаешь значение
 
-# для бд конец
-#@app.before_request
-#def before_request():
-    #global db
 
 
 @app.route('/', methods=['POST', 'GET'])
