@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<! -- Экран избранного на сайте -- >
+<html>
+<head>
+    <title>Избранное</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+{% extends "cap.html" %}
+{% block functions %}
+<div class="container mt-5">
+    <h1>Избранное</h1>
+    <form method="post">
+        <input type="text" name="breed" id="breed" class="form-control" placeholder="Порода собаки"><br>
+        <input type="submit" class="btn btn-success" value="Добавить">
+    </form>
+    <h2>Ваши собаки</h2>
+    <div class="alert alert-info">
+        {% for el in fav %}
+            <div>
+                {{el.breed}}
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

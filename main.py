@@ -5,6 +5,7 @@ import sqlite3
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 users_db = SQLAlchemy(app)
 DATEBASE = 'static/DB/dogs.db'
 
@@ -13,14 +14,22 @@ PASSWORD = None
 
 
 class Users(users_db.Model):
-   # __tablename__ = "users"
-
     id = users_db.Column(users_db.Integer, primary_key=True, autoincrement=True)
     us_login = users_db.Column(users_db.String(15), nullable=False)
     us_password = users_db.Column(users_db.String(20), nullable=False)
 
     def __repr__(self):
         return f'<Users> {self.id} {self.us_login} {self.us_password}'
+
+
+class Favorite(users_db.Model):
+    id = users_db.Column(users_db.Integer, primary_key=True, autoincrement=True)
+    us_login = users_db.Column(users_db.String(15), nullable=False)
+    us_password = users_db.Column(users_db.String(20), nullable=False)
+    breed = users_db.Column(users_db.String(100), nullable=False)
+
+    def __repr__(self):
+        return f'<Users> {self.us_login} {self.us_password} {self.breed}'
 
 
 # для бд начало
@@ -138,6 +147,7 @@ def login():
 
 @app.route('/sign-up', methods=['POST', 'GET'])
 def sign():
+    global LOGIN, PASSWORD
     if request.method == 'POST':
         us_login = request.form['us_login']
         us_password = request.form['us_password']
@@ -153,6 +163,7 @@ def sign():
 
 @app.route('/sign-up_er', methods=['POST', 'GET'])
 def sign_er():
+    global LOGIN, PASSWORD
     if request.method == 'POST':
         us_login = request.form['us_login']
         us_password = request.form['us_password']
@@ -185,6 +196,30 @@ def login_er():
                 return "Ошибка при регистрации"
     else:
         return render_template("login_er.html")
+
+
+@app.route('/favorites', methods=['POST', 'GET'])
+def favorites():
+    global LOGIN, PASSWORD
+    if request.method == 'POST':
+        us_login = LOGIN
+        us_password = PASSWORD
+
+        breed = request.form['breed']
+        if LOGIN == None or LOGIN == "" or PASSWORD == None or PASSWORD == "":
+            return redirect('login')
+        else:
+            fav = Favorite(us_login=us_login, us_password=us_password, breed=breed)
+
+            try:
+                users_db.session.add(fav)
+                users_db.session.commit()
+                return redirect('/favorites')
+            except:
+                return "Ошибка при регистрации"
+    else:
+        fav = Favorite.query.filter(Favorite.us_login == LOGIN, Favorite.us_password == PASSWORD)
+        return render_template("favorites.html", fav=fav)
 
 
 if __name__ == '__main__':
