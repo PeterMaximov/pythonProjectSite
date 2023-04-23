@@ -8,16 +8,19 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 users_db = SQLAlchemy(app)
 DATEBASE = 'static/DB/dogs.db'
 
+LOGIN = None
+PASSWORD = None
+
 
 class Users(users_db.Model):
-    __tablename__ = "users"
+   # __tablename__ = "users"
 
     id = users_db.Column(users_db.Integer, primary_key=True, autoincrement=True)
     us_login = users_db.Column(users_db.String(15), nullable=False)
     us_password = users_db.Column(users_db.String(20), nullable=False)
 
-   # def __repr__(self):
-      #  return '<Users> %r' % self.id
+    def __repr__(self):
+        return f'<Users> {self.id} {self.us_login} {self.us_password}'
 
 
 # для бд начало
@@ -122,16 +125,70 @@ def login():
         us_login = request.form['us_login']
         us_password = request.form['us_password']
 
-        user = Users(us_login=us_login, us_password=us_password)
+        if Users.query.filter(Users.us_login == us_login).first():
+            return redirect('login_er')
+        else:
+            user = Users(us_login=us_login, us_password=us_password)
 
-        try:
-            users_db.session.add(user)
-            users_db.session.commit()
-            return redirect('/')
-        except:
-            return "Ошибка при регистрации"
+            try:
+                users_db.session.add(user)
+                users_db.session.commit()
+                return redirect('/home')
+            except:
+                return "Ошибка при регистрации"
     else:
         return render_template("login.html")
+
+
+@app.route('/sign-up', methods=['POST', 'GET'])
+def sign():
+    if request.method == 'POST':
+        us_login = request.form['us_login']
+        us_password = request.form['us_password']
+        if Users.query.filter(Users.us_login == us_login, Users.us_password == us_password).first():
+            LOGIN = us_login
+            PASSWORD = us_password
+            return redirect('/home')
+        else:
+            return redirect('/sign-up_er')
+    else:
+        return render_template("sign-up.html")
+
+
+@app.route('/sign-up_er', methods=['POST', 'GET'])
+def sign_er():
+    if request.method == 'POST':
+        us_login = request.form['us_login']
+        us_password = request.form['us_password']
+        if Users.query.filter(Users.us_login == us_login, Users.us_password == us_password).first():
+            LOGIN = us_login
+            PASSWORD = us_password
+            return redirect('/home')
+        else:
+            return redirect('/sign-up_er')
+    else:
+        return render_template("sign-up_er.html")
+
+
+@app.route('/login_er', methods=['POST', 'GET'])
+def login_er():
+    if request.method == 'POST':
+        us_login = request.form['us_login']
+        us_password = request.form['us_password']
+
+        if Users.query.filter(Users.us_login == us_login).first():
+            return redirect('login_er')
+        else:
+            user = Users(us_login=us_login, us_password=us_password)
+
+            try:
+                users_db.session.add(user)
+                users_db.session.commit()
+                return redirect('/home')
+            except:
+                return "Ошибка при регистрации"
+    else:
+        return render_template("login_er.html")
 
 
 if __name__ == '__main__':

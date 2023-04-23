@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<! -- Экран входа на сайт -- >
+<! -- Экран ощибки входа на сайт -- >
 <html>
 <head>
     <title>Вход на сайт</title>
@@ -11,6 +11,7 @@
 {% block functions %}
 <div class="container mt-5">
     <h1>Вход</h1>
+    <p style="color:red;font-weight:bold">Неверный логин или пароль</p>
     <form method="post">
         <input type="text" name="us_login" id="us_login" class="form-control" placeholder="Логин"><br>
         <input type="text" name="us_password" id="us_password" class="form-control" placeholder="Пароль"><br>

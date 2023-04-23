@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
-<! -- Экран входа на сайт -- >
+<! -- Экран ошибки регистрации на сайте -- >
 <html>
 <head>
-    <title>Вход на сайт</title>
+    <title>Регистрация на сайте</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
@@ -10,11 +10,13 @@
 {% extends "cap.html" %}
 {% block functions %}
 <div class="container mt-5">
-    <h1>Вход</h1>
+    <h1>Регистрация на сайте</h1>
+    <p style="color:red;font-weight:bold">Такой пользователь уже есть</p>
+    <p style="color:red;font-weight:bold">Или вы ввели некорректное значение логина или пароля</p>
     <form method="post">
         <input type="text" name="us_login" id="us_login" class="form-control" placeholder="Логин"><br>
         <input type="text" name="us_password" id="us_password" class="form-control" placeholder="Пароль"><br>
-        <input type="submit" class="btn btn-success" value="Войти">
+        <input type="submit" class="btn btn-success" value="Зарегистироваться">
     </form>
 </div>
 {% endblock %}
